@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#1a1208" />
+  <meta name="description" content="Étude biblique avec concordance Strong hébraïque et grecque" />
+  <title>מִקְרָא — Étude Biblique Strong</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&family=Noto+Serif+Hebrew:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Sidebar Navigation -->
+    <nav id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <span class="logo-hebrew">מִקְרָא</span>
+          <span class="logo-sub">Étude Biblique</span>
+        </div>
+        <button id="sidebar-close" class="icon-btn" aria-label="Fermer menu">✕</button>
+      </div>
+
+      <div class="nav-section">
+        <p class="nav-label">Navigation</p>
+        <button class="nav-item active" data-view="reader">
+          <span class="nav-icon">📖</span> Lecture
+        </button>
+        <button class="nav-item" data-view="search">
+          <span class="nav-icon">🔍</span> Recherche
+        </button>
+        <button class="nav-item" data-view="lexicon">
+          <span class="nav-icon">📚</span> Lexique Strong
+        </button>
+        <button class="nav-item" data-view="favorites">
+          <span class="nav-icon">⭐</span> Favoris
+        </button>
+        <button class="nav-item" data-view="notes">
+          <span class="nav-icon">✏️</span> Notes
+        </button>
+      </div>
+
+      <div class="nav-section">
+        <p class="nav-label">Outils</p>
+        <button class="nav-item" data-view="compare">
+          <span class="nav-icon">⚖️</span> Comparer traductions
+        </button>
+        <button class="nav-item" data-view="stats">
+          <span class="nav-icon">📊</span> Statistiques
+        </button>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="offline-badge" id="offline-badge">
+          <span class="dot"></span> Hors ligne disponible
+        </div>
+      </div>
+    </nav>
+
+    <!-- Overlay -->
+    <div id="overlay" class="overlay"></div>
+
+    <!-- Main Content -->
+    <div id="main" class="main">
+      <!-- Top Bar -->
+      <header class="topbar">
+        <button id="menu-btn" class="icon-btn" aria-label="Menu">☰</button>
+        <div class="topbar-title" id="topbar-title">Genèse 1</div>
+        <div class="topbar-actions">
+          <button class="icon-btn" id="highlight-btn" title="Surligner">🖊</button>
+          <button class="icon-btn" id="audio-btn" title="Audio">🔊</button>
+          <button class="icon-btn" id="fav-btn" title="Favori">☆</button>
+        </div>
+      </header>
+
+      <!-- Views -->
+      <div id="views">
+
+        <!-- READER VIEW -->
+        <div id="view-reader" class="view active">
+          <!-- Book/Chapter Selector -->
+          <div class="passage-selector">
+            <select id="book-select" class="selector">
+              <option value="gen">Genèse</option>
+              <option value="exo">Exode</option>
+              <option value="lev">Lévitique</option>
+              <option value="num">Nombres</option>
+              <option value="deu">Deutéronome</option>
+              <option value="psa">Psaumes</option>
+              <option value="pro">Proverbes</option>
+              <option value="isa">Ésaïe</option>
+              <option value="jer">Jérémie</option>
+              <option value="joh">Jean</option>
+              <option value="rom">Romains</option>
+            </select>
+            <select id="chapter-select" class="selector">
+              <!-- Populated dynamically -->
+            </select>
+            <select id="translation-select" class="selector">
+              <option value="lsg">LSG</option>
+              <option value="kjv">KJV</option>
+              <option value="heb">Hébreu</option>
+            </select>
+          </div>
+
+          <!-- Reading Mode Toggles -->
+          <div class="mode-bar">
+            <button class="mode-btn active" id="mode-interlinear">Interlinéaire</button>
+            <button class="mode-btn" id="mode-parallel">Parallèle</button>
+            <button class="mode-btn" id="mode-strong-only">Strong</button>
+          </div>
+
+          <!-- Bible Text -->
+          <div id="bible-content" class="bible-content">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- SEARCH VIEW -->
+        <div id="view-search" class="view">
+          <div class="search-container">
+            <h2 class="view-title">Recherche</h2>
+            <div class="search-box">
+              <input type="text" id="search-input" class="search-input" placeholder="Mot, verset, ou numéro Strong (H1234)…" />
+              <button id="search-btn" class="btn-primary">Chercher</button>
+            </div>
+            <div class="search-filters">
+              <label class="filter-chip active" data-filter="text">
+                <input type="radio" name="search-type" value="text" checked /> Texte
+              </label>
+              <label class="filter-chip" data-filter="strong">
+                <input type="radio" name="search-type" value="strong" /> Numéro Strong
+              </label>
+              <label class="filter-chip" data-filter="hebrew">
+                <input type="radio" name="search-type" value="hebrew" /> Hébreu
+              </label>
+            </div>
+            <div id="search-results" class="search-results">
+              <p class="hint-text">Entrez un terme pour rechercher dans la Bible…</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- LEXICON VIEW -->
+        <div id="view-lexicon" class="view">
+          <div class="lexicon-container">
+            <h2 class="view-title">Lexique Strong</h2>
+            <div class="search-box">
+              <input type="text" id="lexicon-input" class="search-input" placeholder="Numéro Strong (H1, G1234) ou mot hébreu…" />
+              <button id="lexicon-btn" class="btn-primary">Chercher</button>
+            </div>
+            <div id="lexicon-result" class="lexicon-result">
+              <p class="hint-text">Entrez un numéro Strong ou cliquez sur un mot dans la Bible…</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- FAVORITES VIEW -->
+        <div id="view-favorites" class="view">
+          <div class="generic-container">
+            <h2 class="view-title">Favoris & Surlignages</h2>
+            <div id="favorites-list" class="favorites-list"></div>
+          </div>
+        </div>
+
+        <!-- NOTES VIEW -->
+        <div id="view-notes" class="view">
+          <div class="generic-container">
+            <h2 class="view-title">Notes Personnelles</h2>
+            <div class="notes-header">
+              <input type="text" id="note-ref" class="search-input" placeholder="Référence (ex: Genèse 1:1)" style="flex:1" />
+              <button id="add-note-btn" class="btn-primary">+ Note</button>
+            </div>
+            <textarea id="note-text" class="note-textarea" placeholder="Écrivez votre note ici…"></textarea>
+            <div id="notes-list" class="notes-list"></div>
+          </div>
+        </div>
+
+        <!-- COMPARE VIEW -->
+        <div id="view-compare" class="view">
+          <div class="generic-container">
+            <h2 class="view-title">Comparer les traductions</h2>
+            <div class="compare-selector">
+              <input type="text" id="compare-ref" class="search-input" placeholder="Référence (ex: Genèse 1:1)" />
+              <button id="compare-btn" class="btn-primary">Comparer</button>
+            </div>
+            <div id="compare-result" class="compare-result"></div>
+          </div>
+        </div>
+
+        <!-- STATS VIEW -->
+        <div id="view-stats" class="view">
+          <div class="generic-container">
+            <h2 class="view-title">Statistiques d'occurrences</h2>
+            <div class="search-box">
+              <input type="text" id="stats-input" class="search-input" placeholder="Mot hébreu ou numéro Strong…" />
+              <button id="stats-btn" class="btn-primary">Analyser</button>
+            </div>
+            <div id="stats-result" class="stats-result"></div>
+          </div>
+        </div>
+
+      </div><!-- /views -->
+    </div><!-- /main -->
+
+    <!-- Strong Popup -->
+    <div id="strong-popup" class="strong-popup hidden">
+      <div class="popup-inner">
+        <button class="popup-close" id="popup-close">✕</button>
+        <div class="popup-header">
+          <span class="popup-number" id="popup-number"></span>
+          <span class="popup-hebrew" id="popup-hebrew"></span>
+          <button class="popup-action-btn" id="popup-lexicon-btn">Voir au lexique →</button>
+        </div>
+        <div class="popup-translit" id="popup-translit"></div>
+        <div class="popup-pronunc" id="popup-pronunc"></div>
+        <div class="popup-divider"></div>
+        <div class="popup-definition" id="popup-definition"></div>
+        <div class="popup-etymology" id="popup-etymology"></div>
+        <div class="popup-related" id="popup-related"></div>
+        <div class="popup-stats" id="popup-stats"></div>
+        <div class="popup-actions">
+          <button class="btn-secondary" id="popup-search-btn">🔍 Toutes occurrences</button>
+          <button class="btn-secondary" id="popup-note-btn">✏️ Ajouter note</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast hidden"></div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

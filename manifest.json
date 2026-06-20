@@ -1,0 +1,41 @@
+{
+  "name": "מִקְרָא — Étude Biblique Strong",
+  "short_name": "מִקְרָא",
+  "description": "Étude biblique avec concordance Strong hébraïque et grecque",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1208",
+  "theme_color": "#1a1208",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "books", "religion"],
+  "lang": "fr",
+  "dir": "ltr",
+  "scope": "/",
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Genèse 1",
+      "url": "/?book=gen&ch=1",
+      "description": "Ouvrir Genèse chapitre 1"
+    },
+    {
+      "name": "Lexique",
+      "url": "/?view=lexicon",
+      "description": "Ouvrir le lexique Strong"
+    }
+  ]
+}
